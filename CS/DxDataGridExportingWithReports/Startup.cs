@@ -48,6 +48,7 @@ namespace DxDataGridExportingWithReports
 
             services.AddDbContext<SpDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddScoped<ISpDBContext, SpDBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,44 @@
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [SpModels] (
+    [Id] int NOT NULL IDENTITY,
+    [SpName] nvarchar(50) NOT NULL,
+    [SpDesciption] nvarchar(100) NOT NULL,
+    [SpSql] nvarchar(1024) NOT NULL,
+    CONSTRAINT [PK_SpModels] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [SpParamModels] (
+    [Id] int NOT NULL IDENTITY,
+    [Seq] int NOT NULL,
+    [ParamName] nvarchar(50) NULL,
+    [ParamType] int NOT NULL,
+    [ParamValue] nvarchar(max) NULL,
+    [SpModelId] int NULL,
+    CONSTRAINT [PK_SpParamModels] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_SpParamModels_SpModels_SpModelId] FOREIGN KEY ([SpModelId]) REFERENCES [SpModels] ([Id]) ON DELETE NO ACTION
+);
+GO
+
+CREATE INDEX [IX_SpParamModels_SpModelId] ON [SpParamModels] ([SpModelId]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20210210085308_InitialMigration', N'5.0.3');
+GO
+
+COMMIT;
+GO
+

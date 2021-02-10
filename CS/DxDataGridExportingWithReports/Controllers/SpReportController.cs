@@ -2,6 +2,7 @@
 using DxDataGridExportingWithReports.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,13 @@ namespace DxDataGridExportingWithReports.Controllers
     [ApiController]
     public class SpReportController : ControllerBase
     {
+        private SpDBContext MyContext { get; set; }
         private IConfiguration Configuration { get; }
-        public SpReportController(IConfiguration configuration)
+        public SpReportController(IConfiguration configuration, SpDBContext spDBContext)
         {
             Configuration = configuration;
+            MyContext = spDBContext;
+
         }
 
         [HttpPost("{spname}")]
@@ -26,8 +30,7 @@ namespace DxDataGridExportingWithReports.Controllers
         {
             try
             {
-                SpDBContext spdb = new SpDBContext();
-                var sp = spdb.SpModels.Where<SpModel>(pp => pp.SpName == spname).FirstOrDefault();
+                var sp = MyContext.SpModels.Where<SpModel>(pp => pp.SpName == spname).FirstOrDefault();
 
                 string rtn = "No records found.";
                 string sql = string.Format("exec {0} ", spname);

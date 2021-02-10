@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace DxDataGridExportingWithReports.Models
 {
-    public class SpDBContext : DbContext
+    public class SpDBContext : DbContext, ISpDBContext
     {
         public SpDBContext()
         {
         }
+
+        private IConfiguration Configuration { get; }
+
         /// <summary>
         /// Magic string.
         /// </summary>
@@ -33,8 +37,14 @@ namespace DxDataGridExportingWithReports.Models
             Console.WriteLine($"{ContextId} context created.");
         }
 
+
         public DbSet<SpModel> SpModels { get; set; }
         public DbSet<SpParamModel> SpParamModels { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("Default"));
+        }
     }
 }

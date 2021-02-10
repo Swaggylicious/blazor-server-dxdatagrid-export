@@ -44,8 +44,8 @@ namespace DxDataGridExportingWithReports.Models
 
     public enum SpParamType
     {
-        stringtype = 'S',
-        numbertype = 'N',
-        datetype = 'D'
+        stringtype = 0,
+        numbertype = 1,
+        datetype = 2
     }
 }
