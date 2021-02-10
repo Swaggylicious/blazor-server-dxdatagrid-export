@@ -26,6 +26,9 @@ namespace DxDataGridExportingWithReports.Controllers
         {
             try
             {
+                SpDBContext spdb = new SpDBContext();
+                var sp = spdb.SpModels.Where<SpModel>(pp => pp.SpName == spname).FirstOrDefault();
+
                 string rtn = "No records found.";
                 string sql = string.Format("exec {0} ", spname);
                 decimal decvalue = 0;
