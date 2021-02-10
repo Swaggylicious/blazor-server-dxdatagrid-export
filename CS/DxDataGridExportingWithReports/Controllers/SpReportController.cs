@@ -31,20 +31,14 @@ namespace DxDataGridExportingWithReports.Controllers
             try
             {
                 var sp = MyContext.SpModels.Where<SpModel>(pp => pp.SpName == spname).FirstOrDefault();
+                sp.Details = MyContext.SpParamModels.Where<SpParamModel>(pp => pp.SpModel == sp).OrderBy(pp => pp.Seq).ToList();
 
                 string rtn = "No records found.";
-                string sql = string.Format("exec {0} ", spname);
+
                 decimal decvalue = 0;
                 DateTime datevalue = DateTime.Now;
-                int paramcnt = 0;
                 foreach (SpParamModel param in json)
                 {
-                    paramcnt++;
-                    if (paramcnt > 1)
-                    {
-                        sql += ",";
-                    }
-
                     switch (param.ParamType)
                     {
                         case SpParamType.stringtype:
@@ -64,15 +58,35 @@ namespace DxDataGridExportingWithReports.Controllers
                             }
                             break;
                     }
-                    if (param.ParamType == SpParamType.numbertype)
-                        sql += string.Format("{0}", param.ParamValue);
-                    else
-                        sql += string.Format("'{0}'", param.ParamValue);
-
-
+                    sp.Details.Where<SpParamModel>(pp => pp.ParamName == param.ParamName).FirstOrDefault().ParamValue = param.ParamValue;
                 }
 
+                string sql = sp.SpSql;
+                foreach (SpParamModel param in sp.Details)
+                {
+                    if (sql.Contains("{" + param.ParamName + "}"))
+                    {
+                        if (param.ParamType == SpParamType.numbertype)
+                        {
+                            sql = sql.Replace("{" + param.ParamName + "}", param.ParamValue);
+                        }
+                        else
+                        {
+                            sql = sql.Replace("{" + param.ParamName + "}", $"'{param.ParamValue}'");
+                        }
 
+                        continue;
+                    }
+                    
+                    if (param.ParamType == SpParamType.numbertype)
+                    {
+                        sql = sql.Replace("{" + param.Seq.ToString() + "}", param.ParamValue);
+                    }
+                    else
+                    {
+                        sql = sql.Replace("{" + param.Seq.ToString() + "}", $"'{param.ParamValue}'");
+                    }
+                }
                 using (SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("Default")))
                 {
                     var list = conn.Query<dynamic>(sql).ToArray();

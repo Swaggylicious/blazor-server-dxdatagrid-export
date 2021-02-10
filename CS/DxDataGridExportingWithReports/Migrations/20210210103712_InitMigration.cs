@@ -2,7 +2,7 @@
 
 namespace DxDataGridExportingWithReports.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace DxDataGridExportingWithReports.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SpName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SpDesciption = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    SpSql = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false)
+                    SpSql = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

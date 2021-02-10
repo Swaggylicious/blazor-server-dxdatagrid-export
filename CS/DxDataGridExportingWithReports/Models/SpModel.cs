@@ -24,7 +24,6 @@ namespace DxDataGridExportingWithReports.Models
         [StringLength(100, ErrorMessage = "Description cannot exceed 100 characters.")]
         public string SpDesciption { get; set; }
         [Required]
-        [StringLength(1024, ErrorMessage = "Sql cannot exceed 1024 characters.")]
         public string SpSql { get; set; }
         public ICollection<SpParamModel> Details { get; set; }
 

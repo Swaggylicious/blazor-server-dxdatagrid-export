@@ -15,7 +15,7 @@ CREATE TABLE [SpModels] (
     [Id] int NOT NULL IDENTITY,
     [SpName] nvarchar(50) NOT NULL,
     [SpDesciption] nvarchar(100) NOT NULL,
-    [SpSql] nvarchar(1024) NOT NULL,
+    [SpSql] nvarchar(max) NOT NULL,
     CONSTRAINT [PK_SpModels] PRIMARY KEY ([Id])
 );
 GO
@@ -36,7 +36,7 @@ CREATE INDEX [IX_SpParamModels_SpModelId] ON [SpParamModels] ([SpModelId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210210085308_InitialMigration', N'5.0.3');
+VALUES (N'20210210103712_InitMigration', N'5.0.3');
 GO
 
 COMMIT;

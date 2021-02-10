@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DxDataGridExportingWithReports.Migrations
 {
     [DbContext(typeof(SpDBContext))]
-    [Migration("20210210085308_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20210210103712_InitMigration")]
+    partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,8 +40,7 @@ namespace DxDataGridExportingWithReports.Migrations
 
                     b.Property<string>("SpSql")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

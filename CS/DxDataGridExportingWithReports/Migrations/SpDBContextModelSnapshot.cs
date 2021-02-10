@@ -38,8 +38,7 @@ namespace DxDataGridExportingWithReports.Migrations
 
                     b.Property<string>("SpSql")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
