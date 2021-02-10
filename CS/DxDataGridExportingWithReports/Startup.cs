@@ -20,6 +20,7 @@ namespace DxDataGridExportingWithReports
             Configuration = configuration;
         }
 
+        const string corsPolicy = "CorsPolicy";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -28,7 +29,19 @@ namespace DxDataGridExportingWithReports
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton(Configuration);
             services.AddTransient<ExportMiddleware>();
+            services.AddControllers();
+            //services.AddMvc();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(corsPolicy, builder =>
+                 builder.AllowAnyOrigin()
+                 .AllowAnyMethod()
+                 .AllowAnyHeader()
+                 .Build());
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,10 +60,13 @@ namespace DxDataGridExportingWithReports
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors(corsPolicy);
 
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapControllers(); // enable controller to be called
             });
         }
     }
