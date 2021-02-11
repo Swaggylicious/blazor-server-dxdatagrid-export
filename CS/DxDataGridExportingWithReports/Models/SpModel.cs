@@ -39,7 +39,7 @@ namespace DxDataGridExportingWithReports.Models
         public string ParamName { get; set; }
         public SpParamType ParamType { get; set; }
         public string ParamValue { get; set; }
-        //[IgnoreDataMember]
+        [IgnoreDataMember]
         public virtual SpModel SpModel { get; set; }
     }
 
