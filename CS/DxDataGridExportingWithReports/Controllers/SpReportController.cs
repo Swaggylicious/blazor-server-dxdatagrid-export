@@ -16,24 +16,28 @@ namespace DxDataGridExportingWithReports.Controllers
     [ApiController]
     public class SpReportController : ControllerBase
     {
-        private SpDBContext MyContext { get; set; }
-        private IConfiguration Configuration { get; }
         public SpReportController(IConfiguration configuration, SpDBContext spDBContext)
         {
             Configuration = configuration;
             MyContext = spDBContext;
 
         }
+        private SpDBContext MyContext { get; set; }
+        private IConfiguration Configuration { get; }
 
         [HttpPost("{spname}")]
         public IActionResult CustomPost(string spname, [FromBody] SpParamModel[] json)
         {
             try
             {
+                string rtn = "No records found.";
                 var sp = MyContext.SpModels.Where<SpModel>(pp => pp.SpName == spname).FirstOrDefault();
+                if (sp == null)
+                {
+                    return Problem(rtn);
+                }
                 sp.Details = MyContext.SpParamModels.Where<SpParamModel>(pp => pp.SpModel == sp).OrderBy(pp => pp.Seq).ToList();
 
-                string rtn = "No records found.";
 
                 decimal decvalue = 0;
                 DateTime datevalue = DateTime.Now;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace DxDataGridExportingWithReports.Models
@@ -38,6 +39,7 @@ namespace DxDataGridExportingWithReports.Models
         public string ParamName { get; set; }
         public SpParamType ParamType { get; set; }
         public string ParamValue { get; set; }
+        //[IgnoreDataMember]
         public virtual SpModel SpModel { get; set; }
     }
 

@@ -13,6 +13,7 @@ using DxDataGridExportingWithReports.Data;
 using DxDataGridExportingWithReports.Helpers;
 using DxDataGridExportingWithReports.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DxDataGridExportingWithReports
 {
@@ -29,13 +30,17 @@ namespace DxDataGridExportingWithReports
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
 
+            //Action<MvcNewtonsoftJsonOptions> JsonOptions = options =>
+            //{
+            //    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            //};
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton(Configuration);
             services.AddTransient<ExportMiddleware>();
             services.AddControllers();
-            //services.AddMvc();
             services.AddCors(options =>
             {
                 options.AddPolicy(corsPolicy, builder =>
@@ -49,6 +54,11 @@ namespace DxDataGridExportingWithReports
             services.AddDbContext<SpDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddScoped<ISpDBContext, SpDBContext>();
+
+            services.AddMvc()
+                .AddNewtonsoftJson(
+                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
